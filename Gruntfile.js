@@ -43,7 +43,7 @@ module.exports = function(grunt) {
         compress: {},
         mangle: true,
         sourceMap: true,
-        banner: '<%= meta.banner %>\n'
+        banner: '<%= meta.banner %>'
       },
       static_mappings: {
         // Because these src-dest file mappings are manually specified, every
