@@ -79,7 +79,7 @@ module.exports = function(grunt) {
     },
     
     responsive_images: {
-      dev: {
+      percentage: {
         options: {
           engine: 'im',
           newFilesOnly: true,
@@ -101,7 +101,51 @@ module.exports = function(grunt) {
           cwd: 'src/img/',
           dest: 'dist/img/'
         }]
+      },
+      thumbnails: {
+        options: {
+          engine: 'im',
+          newFilesOnly: true,
+          sizes: [{
+            name: 'thumb',
+            width: 115,
+            suffix: '_x1',
+            quality: 20
+          },{
+            name: 'icon',
+            width: 70,
+            suffix: '_x1',
+            quality: 20
+          }]
+        },
+        files: [{
+          expand: true,
+          src: ['**/*.{gif,jpg,png}'],
+          cwd: 'src/img/',
+          dest: 'dist/img/'
+          //custom_dest: 'dist/img/{%= name %}/'
+        }]
+      },
+      pizza: {
+        options: {
+          engine: 'im',
+          newFilesOnly: true,
+          sizes: [{
+            name: 'thumb',
+            width: 115,
+            suffix: '_x1',
+            quality: 20
+          }]
+        },
+        files: [{
+          expand: true,
+          src: ['**/*.{gif,jpg,png}'],
+          cwd: 'views/src/images/',
+          dest: 'views/dist/images'
+          //custom_dest: 'views/dist/images/{%= name %}/'
+        }]
       }
+
     }
 
   });
@@ -111,6 +155,6 @@ module.exports = function(grunt) {
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('jscomp', ['uglify:static_mappings']);
   grunt.registerTask('csscomp', ['cssmin:static_mappings']);
-  grunt.registerTask('imgcomp', ['responsive_images:dev']);
+  grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
     
 };
