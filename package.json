@@ -1,0 +1,14 @@
+{
+  "name": "udacity_fewd_p4",
+  "version": "0.0.1",
+  "description": "Udacity Frontend Nanodegree Project 4",
+  "author": "Murat Ozgul",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "load-grunt-tasks": "^1.0.0",
+    "time-grunt": "^1.0.0",
+    "grunt-contrib-jshint": "~0.11.3",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-cssmin": "^0.14.0"
+  }
+}
