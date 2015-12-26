@@ -76,6 +76,32 @@ module.exports = function(grunt) {
           '<%= paths.dest.css %>/print.min.css': ['<%= paths.src.css %>/print.css']
         }
       }
+    },
+    
+    responsive_images: {
+      dev: {
+        options: {
+          engine: 'im',
+          newFilesOnly: true,
+          sizes: [{
+            name: 'small',
+            width: '30%',
+            suffix: '_small',
+            quality: 20
+          },{
+            name: 'large',
+            width: '50%',
+            suffix: '_large',
+            quality: 40
+          }]
+        },
+        files: [{
+          expand: true,
+          src: ['*.{gif,jpg,png}'],
+          cwd: 'src/img/',
+          dest: 'dist/img/'
+        }]
+      }
     }
 
   });
@@ -85,5 +111,6 @@ module.exports = function(grunt) {
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('jscomp', ['uglify:static_mappings']);
   grunt.registerTask('csscomp', ['cssmin:static_mappings']);
+  grunt.registerTask('imgcomp', ['responsive_images:dev']);
     
 };
