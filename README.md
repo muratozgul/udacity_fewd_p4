@@ -2,6 +2,10 @@ Visit project page at <http://muratozgul.github.io/udacity_fewd_p4/>
 
 ## index.html
 
+##### Install imagemagick (to run grunt image related tasks)
+OS X
+`brew install imagemagick --build-from-source`
+
 ##### Install npm modules
 `npm install`
 
