@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      files: ['<%= paths.src.jsAll %>'],
+      files: ['<%= paths.src.jsAll %>', 'views/<%= paths.src.jsAll %>'],
       options: {
         // options here to override JSHint defaults
       }
@@ -263,7 +263,7 @@ module.exports = function(grunt) {
     'htmlmin:dist'
   ]);
   grunt.registerTask('img', [
-    'responsive_images:thumbnails', 
+    'responsive_images:thumbnails',
     'responsive_images:pizza',
     'imagemin:dynamic'
   ]);
