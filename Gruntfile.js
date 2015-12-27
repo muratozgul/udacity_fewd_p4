@@ -4,6 +4,9 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
   // Load all grunt-* packages from package.json
   require('load-grunt-tasks')(grunt);
+
+  // Load mozilla JPEG encoder
+  var mozjpeg = require('imagemin-mozjpeg');
  
   // Project configuration
   grunt.initConfig({
@@ -110,12 +113,12 @@ module.exports = function(grunt) {
             name: 'thumb',
             width: 115,
             suffix: '_x1',
-            quality: 20
+            quality: 40
           },{
             name: 'icon',
             width: 70,
             suffix: '_x1',
-            quality: 20
+            quality: 40
           }]
         },
         files: [{
@@ -145,7 +148,52 @@ module.exports = function(grunt) {
           //custom_dest: 'views/dist/images/{%= name %}/'
         }]
       }
+    },
 
+    imagemin: {                          // Task
+      static: {                          // Target
+        options: {                       // Target options
+          optimizationLevel: 3,
+          svgoPlugins: [{ removeViewBox: false }],
+          use: [mozjpeg()]
+        },
+        files: {                         // Dictionary of files
+          'dist/img.png': 'src/img.png', // 'destination': 'source'
+          'dist/img.jpg': 'src/img.jpg',
+          'dist/img.gif': 'src/img.gif'
+        }
+      },
+      dynamic: {                         // Another target
+        files: [{
+          expand: true,                  // Enable dynamic expansion
+          src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
+          cwd: 'dist/img',               // Src matches are relative to this path
+          dest: 'dist/img'    // Destination path prefix
+        }]
+      }
+    },
+
+    pagespeed: {
+      options: {
+        nokey: true,
+        url: "https://developers.google.com"
+      },
+      prod_desktop: {
+        options: {
+          url: "http://muratozgul.github.io/udacity_fewd_p4/",
+          locale: "en_GB",
+          strategy: "desktop",
+          threshold: 0 //bug hotfix, otherwise hangs
+        }
+      },
+      prod_mobile: {
+        options: {
+          url: "http://muratozgul.github.io/udacity_fewd_p4/",
+          locale: "en_GB",
+          strategy: "mobile",
+          threshold: 0 //bug hotfix, otherwise hangs
+        }
+      }
     }
 
   });
@@ -156,5 +204,7 @@ module.exports = function(grunt) {
   grunt.registerTask('jscomp', ['uglify:static_mappings']);
   grunt.registerTask('csscomp', ['cssmin:static_mappings']);
   grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
+  grunt.registerTask('imgopt', ['imagemin:dynamic']);
+  grunt.registerTask('psiprod', ['pagespeed:prod_desktop']);
     
 };
