@@ -550,7 +550,7 @@ window.addEventListener('scroll', function() {
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  var numOfPizzas = 32;
+  var numOfPizzas = 64;
   var querySelector = document.querySelector("#movingPizzas1");
   for (var i = 0; i < numOfPizzas; i++) {
     var elem = document.createElement('img');
