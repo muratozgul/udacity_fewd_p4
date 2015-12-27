@@ -1,73 +1,114 @@
-## Website Performance Optimization portfolio project
+Visit project page at <http://muratozgul.github.io/udacity_fewd_p4/>
 
-Your challenge, if you wish to accept it (and we sure hope you will), is to optimize this online portfolio for speed! In particular, optimize the critical rendering path and make this page render as quickly as possible by applying the techniques you've picked up in the [Critical Rendering Path course](https://www.udacity.com/course/ud884).
+## index.html
 
-To get started, check out the repository, inspect the code,
+##### Install npm modules
+`npm install`
 
-### Getting started
+Do not need to run grunt tasks.
+Production files are under "dist/" directory.
+Checkout Gruntfile.js for details.
 
-####Part 1: Optimize PageSpeed Insights score for index.html
+##### Visit [project page](http://muratozgul.github.io/udacity_fewd_p4/) or open index.html 
+Use index.html file at the project root (not dist/index.html)
+Both index.html and dist/index.html are the same but relative paths may not work under dist folder
 
-Some useful tips to help you get started:
+#### Results:
+Google Developers PageSpeed Insights [results](https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fmuratozgul.github.io%2Fudacity_fewd_p4%2F)
+* Desktop: 97/100
+* Mobile: 96/100
 
-1. Check out the repository
-1. To inspect the site on your phone, you can run a local server
+## pizza.html
 
-  ```bash
-  $> cd /path/to/your-project-folder
-  $> python -m SimpleHTTPServer 8080
-  ```
+##### Modified changePizzaSizes function
 
-1. Open a browser and visit localhost:8080
-1. Download and install [ngrok](https://ngrok.com/) to make your local server accessible remotely.
+```js
+function changePizzaSizes(size) {
+  var newWidth;
+  
+  if(size === "1") {
+    newwidth = 25;
+  } else if(size === "2") {
+    newwidth = 33.3;
+  } else if(size === "3") {
+    newwidth = 50;
+  } else {
+    console.log("bug in changePizzaSizes:sizeSwitcher");
+  }
 
-  ``` bash
-  $> cd /path/to/your-project-folder
-  $> ngrok http 8080
-  ```
+  var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
+  for (var i = 0; i < randomPizzas.length; i++) {
+    randomPizzas[i].style.width = newwidth + "%";
+  }
+}
+```
 
-1. Copy the public URL ngrok gives you and try running it through PageSpeed Insights! Optional: [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
+##### Modified updatePositions function
 
-Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
+```js
+function updatePositions() {
+  frame++;
+  window.performance.mark("mark_start_frame");
 
-####Part 2: Optimize Frames per Second in pizza.html
+  var items = document.querySelectorAll('.mover');
+  var scrollTop = document.body.scrollTop / 1250;
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin(scrollTop + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  }
 
-To optimize views/pizza.html, you will need to modify views/js/main.js until your frames per second rate is 60 fps or higher. You will find instructive comments in main.js. 
+  // User Timing API to the rescue again. Seriously, it's worth learning.
+  // Super easy to create custom metrics.
+  window.performance.mark("mark_end_frame");
+  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  if (frame % 10 === 0) {
+    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+    logAverageFrame(timesToUpdatePosition);
+  }
+}
+```
 
-You might find the FPS Counter/HUD Display useful in Chrome developer tools described here: [Chrome Dev Tools tips-and-tricks](https://developer.chrome.com/devtools/docs/tips-and-tricks).
+##### Reduced the number of moving pizzas
+From 200 to 64
 
-### Optimization Tips and Tricks
-* [Optimizing Performance](https://developers.google.com/web/fundamentals/performance/ "web performance")
-* [Analyzing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "analyzing crp")
-* [Optimizing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "optimize the crp!")
-* [Avoiding Rendering Blocking CSS](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "render blocking css")
-* [Optimizing JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [Measuring with Navigation Timing](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api"). We didn't cover the Navigation Timing API in the first two lessons but it's an incredibly useful tool for automated page profiling. I highly recommend reading.
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">The fewer the downloads, the better</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">Reduce the size of text</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">Optimize images</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP caching</a>
+```js
+document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
+  var s = 256;
+  var numOfPizzas = 64;
+  var querySelector = document.querySelector("#movingPizzas1");
+  for (var i = 0; i < numOfPizzas; i++) {
+    var elem = document.createElement('img');
+    elem.className = 'mover force-layer';
+    elem.src = "src/images/pizza.png";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    querySelector.appendChild(elem);
+  }
+  updatePositions();
+});
+```
 
-### Customization with Bootstrap
-The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> framework. All custom styles are in `dist/css/portfolio.css` in the portfolio repo.
+##### Forced layer on moving pizzas
 
-* <a href="http://getbootstrap.com/css/">Bootstrap's CSS Classes</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap's Components</a>
+```css
+.force-layer {
+  will-change: transform;
+  transform: translateZ(0);
+}
+```
 
-### Sample Portfolios
+##### Handled scroll events inside requestAnimationFrame
 
-Feeling uninspired by the portfolio? Here's a list of cool portfolios I found after a few minutes of Googling.
+```js
+window.addEventListener('scroll', function() {
+   window.requestAnimationFrame(updatePositions);
+});
+```
 
-* <a href="http://www.reddit.com/r/webdev/comments/280qkr/would_anybody_like_to_post_their_portfolio_site/">A great discussion about portfolios on reddit</a>
-* <a href="http://ianlunn.co.uk/">http://ianlunn.co.uk/</a>
-* <a href="http://www.adhamdannaway.com/portfolio">http://www.adhamdannaway.com/portfolio</a>
-* <a href="http://www.timboelaars.nl/">http://www.timboelaars.nl/</a>
-* <a href="http://futoryan.prosite.com/">http://futoryan.prosite.com/</a>
-* <a href="http://playonpixels.prosite.com/21591/projects">http://playonpixels.prosite.com/21591/projects</a>
-* <a href="http://colintrenter.prosite.com/">http://colintrenter.prosite.com/</a>
-* <a href="http://calebmorris.prosite.com/">http://calebmorris.prosite.com/</a>
-* <a href="http://www.cullywright.com/">http://www.cullywright.com/</a>
-* <a href="http://yourjustlucky.com/">http://yourjustlucky.com/</a>
-* <a href="http://nicoledominguez.com/portfolio/">http://nicoledominguez.com/portfolio/</a>
-* <a href="http://www.roxannecook.com/">http://www.roxannecook.com/</a>
-* <a href="http://www.84colors.com/portfolio.html">http://www.84colors.com/portfolio.html</a>
+#### Results:
+(Mac Book Pro - OS X 10.10.5 | Chrome Version 47.0.2526.106 (64-bit))
+* Time to resize pizzas: 0.6450000000004366ms
+* Average time to generate last 10 frames: 0.3529999999984284ms

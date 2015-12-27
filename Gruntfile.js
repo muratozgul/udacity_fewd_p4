@@ -14,11 +14,13 @@ module.exports = function(grunt) {
     // This line makes your node configurations available for use
     pkg: grunt.file.readJSON('package.json'),
 
+    // Message included in minified files
     meta: {
       banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %> */'
     },
 
+    // Path helpers
     paths: {
       src: {
         js: 'src/js',
@@ -34,6 +36,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // check JS syntax & static analysis
     jshint: {
       files: ['<%= paths.src.jsAll %>', 'views/<%= paths.src.jsAll %>'],
       options: {
@@ -41,6 +44,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // minify + compress js
     uglify: {
       options: {
         compress: {},
@@ -72,6 +76,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // minify css
     cssmin: {
       static_mappings: {
         files: {
@@ -82,6 +87,7 @@ module.exports = function(grunt) {
       }
     },
     
+    // resize-rename images
     responsive_images: {
       percentage: {
         options: {
@@ -151,6 +157,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // compress images
     imagemin: {                          // Task
       static: {                          // Target
         options: {                       // Target options
@@ -179,6 +186,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // process HTML (inline css from external css files)
     processhtml: {
       test: {
         options: {
@@ -208,6 +216,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // minify html
     htmlmin: {
       test: {
         options: {
@@ -230,6 +239,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // check page speed insights
     pagespeed: {
       options: {
         nokey: true,
@@ -254,7 +264,6 @@ module.exports = function(grunt) {
     }
   });
 
-  // the default task can be run just by typing "grunt" on the command line
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('min', [
     'uglify:static_mappings',
@@ -269,10 +278,11 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('speed', ['pagespeed:prod_desktop']);
   
-  grunt.registerTask('jscomp', ['uglify:static_mappings']);
-  grunt.registerTask('csscomp', ['cssmin:static_mappings']);
-  grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
-  grunt.registerTask('imgopt', ['imagemin:dynamic']);
-  grunt.registerTask('inline', ['processhtml:test']);
-  grunt.registerTask('htmlcomp', ['htmlmin:test']);
+  // For testing:
+  // grunt.registerTask('jscomp', ['uglify:static_mappings']);
+  // grunt.registerTask('csscomp', ['cssmin:static_mappings']);
+  // grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
+  // grunt.registerTask('imgopt', ['imagemin:dynamic']);
+  // grunt.registerTask('inline', ['processhtml:test']);
+  // grunt.registerTask('htmlcomp', ['htmlmin:test']);
 };
