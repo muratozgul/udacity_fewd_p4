@@ -76,6 +76,7 @@ module.exports = function(grunt) {
       static_mappings: {
         files: {
           '<%= paths.dest.css %>/style.min.css': ['<%= paths.src.css %>/style.css'],
+          '<%= paths.dest.css %>/font.min.css': ['<%= paths.src.css %>/font.css'],
           '<%= paths.dest.css %>/print.min.css': ['<%= paths.src.css %>/print.css']
         }
       }
@@ -268,10 +269,10 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('speed', ['pagespeed:prod_desktop']);
   
-  // grunt.registerTask('jscomp', ['uglify:static_mappings']);
-  // grunt.registerTask('csscomp', ['cssmin:static_mappings']);
-  // grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
-  // grunt.registerTask('imgopt', ['imagemin:dynamic']);
-  // grunt.registerTask('inline', ['processhtml:test']);
-  // grunt.registerTask('htmlcomp', ['htmlmin:test']);
+  grunt.registerTask('jscomp', ['uglify:static_mappings']);
+  grunt.registerTask('csscomp', ['cssmin:static_mappings']);
+  grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
+  grunt.registerTask('imgopt', ['imagemin:dynamic']);
+  grunt.registerTask('inline', ['processhtml:test']);
+  grunt.registerTask('htmlcomp', ['htmlmin:test']);
 };
