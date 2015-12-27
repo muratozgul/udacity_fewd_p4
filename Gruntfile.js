@@ -169,6 +169,11 @@ module.exports = function(grunt) {
           src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
           cwd: 'dist/img',               // Src matches are relative to this path
           dest: 'dist/img'    // Destination path prefix
+        }, {
+          expand: true,
+          src: ['**/*.{png,jpg,gif}'],
+          cwd: 'views/dist/images',  // pizza view
+          dest: 'views/dist/images'
         }]
       }
     },
@@ -195,7 +200,6 @@ module.exports = function(grunt) {
         }
       }
     }
-
   });
 
   // the default task can be run just by typing "grunt" on the command line
