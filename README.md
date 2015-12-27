@@ -5,12 +5,12 @@ Visit project page at <http://muratozgul.github.io/udacity_fewd_p4/>
 ##### Install npm modules
 `npm install`
 
-Do not need to run grunt tasks.
-Production files are under "dist/" directory.
-Checkout Gruntfile.js for details.
+Do not need to run grunt tasks.  
+Production files are under "dist/" directory.  
+Checkout Gruntfile.js for details.  
 
 ##### Visit [project page](http://muratozgul.github.io/udacity_fewd_p4/) or open index.html 
-Use index.html file at the project root (not dist/index.html)
+Use index.html file at the project root (not dist/index.html)  
 Both index.html and dist/index.html are the same but relative paths may not work under dist folder
 
 #### Results:
