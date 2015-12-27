@@ -178,6 +178,57 @@ module.exports = function(grunt) {
       }
     },
 
+    processhtml: {
+      test: {
+        options: {
+          process: true,
+          includeBase: './',
+          data: {
+            title: 'My app',
+            message: 'This is production distribution'
+          }
+        },
+        files: {
+          'dist/index.inlined.html': ['src/index.html']
+        }
+      },
+      dist: {
+        options: {
+          process: true,
+          includeBase: './',
+          data: {
+            title: 'My app',
+            message: 'This is production distribution'
+          }
+        },
+        files: {
+          'index.html': ['src/index.html']
+        }
+      }
+    },
+
+    htmlmin: {
+      test: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: {
+          'dist/index.min.html': 'dist/index.inlined.html'
+        }
+      },
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: {
+          'index.html': 'index.html',
+          'dist/index.html': 'index.html',
+        }
+      }
+    },
+
     pagespeed: {
       options: {
         nokey: true,
@@ -203,12 +254,24 @@ module.exports = function(grunt) {
   });
 
   // the default task can be run just by typing "grunt" on the command line
-  grunt.registerTask('default', ['jshint']);
   grunt.registerTask('hint', ['jshint']);
-  grunt.registerTask('jscomp', ['uglify:static_mappings']);
-  grunt.registerTask('csscomp', ['cssmin:static_mappings']);
-  grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
-  grunt.registerTask('imgopt', ['imagemin:dynamic']);
-  grunt.registerTask('psiprod', ['pagespeed:prod_desktop']);
-    
+  grunt.registerTask('min', [
+    'uglify:static_mappings',
+    'cssmin:static_mappings',
+    'processhtml:dist',
+    'htmlmin:dist'
+  ]);
+  grunt.registerTask('img', [
+    'responsive_images:thumbnails', 
+    'responsive_images:pizza',
+    'imagemin:dynamic'
+  ]);
+  grunt.registerTask('speed', ['pagespeed:prod_desktop']);
+  
+  // grunt.registerTask('jscomp', ['uglify:static_mappings']);
+  // grunt.registerTask('csscomp', ['cssmin:static_mappings']);
+  // grunt.registerTask('imgcomp', ['responsive_images:thumbnails', 'responsive_images:pizza']);
+  // grunt.registerTask('imgopt', ['imagemin:dynamic']);
+  // grunt.registerTask('inline', ['processhtml:test']);
+  // grunt.registerTask('htmlcomp', ['htmlmin:test']);
 };
